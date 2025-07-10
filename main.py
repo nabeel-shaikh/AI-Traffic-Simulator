@@ -24,8 +24,7 @@ clock = pygame.time.Clock()
 
 def draw_intersection():
     screen.fill(grey)
-
-
+    
     #horizontal road
     pygame.draw.rect(screen, black,(0,screen_height//2-road_width//2, screen_width, road_width))
 
