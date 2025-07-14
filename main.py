@@ -46,10 +46,10 @@ def main():
                 pygame.quit()
                 sys.exit()
         draw_intersection()
-        Tf1 = Traffic_Light(460, 300, screen)#need to pass arguments
-        Tf2 = Traffic_Light(520, 600, screen)#need to pass arguments
-        Tf3 = Traffic_Light(300, 460, screen)#need to pass arguments
-        Tf4 = Traffic_Light(600, 520, screen)#need to pass arguments
+        Tf1 = Traffic_Light(300, 275, screen)#need to pass arguments
+        Tf2 = Traffic_Light(700, 275, screen)#need to pass arguments
+        Tf3 = Traffic_Light(300, 700, screen)#need to pass arguments
+        Tf4 = Traffic_Light(700, 700, screen)#need to pass arguments
         pygame.display.flip()
         
         clock.tick(fps)
