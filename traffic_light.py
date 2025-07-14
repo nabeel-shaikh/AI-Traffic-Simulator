@@ -1,11 +1,10 @@
 import time
 import pygame
 class Traffic_Light:
-    def __init__(self,x,y,orientation,screen) -> None:
+    def __init__(self,x,y,screen) -> None:
         self.screen = screen
         self.x = x
         self.y = y
-        self.orientation = orientation #north/south/east/west.
         self.advanceLeft = "Red"
 
         #lights colours
@@ -13,8 +12,13 @@ class Traffic_Light:
         self.color_yellow = (200,200,0)
         self.color_green = (0,200,0)
         self.off_color = (40,40,40)
-        #draw traffic light with x,y,orientation.
-        #make sure traffic light red
+        #draw traffic light with x,y,orientation. add code here
+        pygame.draw.rect(self.screen, (50, 50, 50), (self.x, self.y, 20, 60))
+        #make sure traffic light red. add code here
+        pygame.draw.circle(self.screen, self.color_red, (self.x + 10, self.y + 10), 8)       # red on
+        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 30), 8)       # yellow off
+        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 50), 8)
+
 
         
     def setGreen(self):
