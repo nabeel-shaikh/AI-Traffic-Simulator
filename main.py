@@ -37,10 +37,7 @@ def draw_intersection():
     Tf2 = Traffic_Light(520, 600, screen)#need to pass arguments
     Tf3 = Traffic_Light(300, 460, screen)#need to pass arguments
     Tf4 = Traffic_Light(600, 520, screen)#need to pass arguments
-    time.sleep(3)
     Tf1.setGreen()
-    time.sleep(3)
-    Tf1.setRed()
 
 
 

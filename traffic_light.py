@@ -1,4 +1,4 @@
-import time
+
 import pygame
 class Traffic_Light:
     def __init__(self,x,y,screen) -> None:
@@ -14,31 +14,30 @@ class Traffic_Light:
         self.off_color = (40,40,40)
         #draw traffic light with x,y,orientation. add code here
         pygame.draw.rect(self.screen, (50, 50, 50), (self.x, self.y, 20, 60))
-        #make sure traffic light red. add code here
-        pygame.draw.circle(self.screen, self.color_red, (self.x + 10, self.y + 10), 8)       # red on
-        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 30), 8)       # yellow off
-        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 50), 8)
-
-
         
+        self.setRed()
+     
     def setGreen(self):
+        self.clearTF()
         pygame.draw.circle(self.screen, self.color_green, (self.x + 10, self.y + 10 + 2*20),8)
     
     def setRed(self):
-
+        self.clearTF()
         pygame.draw.circle(self.screen, self.color_yellow, (self.x + 10, self.y + 10 + 1*20),8)
-        time.sleep(3)
+        self.clearTF()
         pygame.draw.circle(self.screen, self.color_red, (self.x + 10, self.y + 10),8)
 
+    def clearTF(self):
+        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 10), 8)      
+        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 30), 8)      
+        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 50), 8) 
 
-    
     def setAdvLeft(self):
         pygame.draw.rect(self.screen,self.color_green,(self.x + 25, self.y + 10, 8, 16)) # use rect as straight arrow.
 
     
     def cancelAdvLeft(self):
         pygame.draw.rect(self.screen,self.color_yellow,(self.x + 25, self.y + 10, 8, 16)) 
-        time.sleep(3)
         pygame.draw.rect(self.screen,self.color_red,(self.x + 25, self.y + 10, 8, 16))
         
 
