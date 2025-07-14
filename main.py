@@ -33,11 +33,8 @@ def draw_intersection():
     #vertical road
     pygame.draw.rect(screen,black,(screen_width//2-road_width//2, 0, road_width, screen_height))
 
-    Tf1 = Traffic_Light(460, 300, screen)#need to pass arguments
-    Tf2 = Traffic_Light(520, 600, screen)#need to pass arguments
-    Tf3 = Traffic_Light(300, 460, screen)#need to pass arguments
-    Tf4 = Traffic_Light(600, 520, screen)#need to pass arguments
-    Tf1.setGreen()
+
+
 
 
 
@@ -49,9 +46,14 @@ def main():
                 pygame.quit()
                 sys.exit()
         draw_intersection()
+        Tf1 = Traffic_Light(460, 300, screen)#need to pass arguments
+        Tf2 = Traffic_Light(520, 600, screen)#need to pass arguments
+        Tf3 = Traffic_Light(300, 460, screen)#need to pass arguments
+        Tf4 = Traffic_Light(600, 520, screen)#need to pass arguments
         pygame.display.flip()
         
         clock.tick(fps)
+        
         
 
 if __name__ == "__main__":
