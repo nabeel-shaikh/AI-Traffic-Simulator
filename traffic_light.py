@@ -1,54 +1,57 @@
-
 import pygame
+
 class Traffic_Light:
-    def __init__(self,x,y,screen) -> None:
+    def __init__(self, x, y, screen, angle=0):
         self.screen = screen
         self.x = x
         self.y = y
-        self.advanceLeft = "Red"
+        self.angle = angle  # Degrees: 0, 90, 180, -90
 
-        #lights colours
-        self.color_red = (200,0,0)
-        self.color_yellow = (200,200,0)
-        self.color_green = (0,200,0)
-        self.off_color = (40,40,40)
-        #draw traffic light with x,y,orientation. add code here
-        pygame.draw.rect(self.screen, (50, 50, 50), (self.x, self.y, 20, 60))
-        
-        self.setRed()
-     
+        # Colors
+        self.color_red = (200, 0, 0)
+        self.color_yellow = (200, 200, 0)
+        self.color_green = (0, 200, 0)
+        self.off_color = (40, 40, 40)
+
+        self.state = 'red'  # default
+
+        self.width = 20
+        self.height = 60
+
+        self.draw()  # draw initial state
+
+    def draw(self):
+        # Create light surface
+        light_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        light_surface.fill((50, 50, 50))  # light casing
+
+        # Draw lights based on current state
+        pygame.draw.circle(light_surface, self.color_red if self.state == 'red' else self.off_color, (10, 10), 8)
+        pygame.draw.circle(light_surface, self.color_yellow if self.state == 'yellow' else self.off_color, (10, 30), 8)
+        pygame.draw.circle(light_surface, self.color_green if self.state == 'green' else self.off_color, (10, 50), 8)
+
+        # Rotate the surface
+        rotated_surface = pygame.transform.rotate(light_surface, self.angle)
+        rect = rotated_surface.get_rect(center=(self.x, self.y))
+
+        # Draw to screen
+        self.screen.blit(rotated_surface, rect.topleft)
+
     def setGreen(self):
-        self.clearTF()
-        pygame.draw.circle(self.screen, self.color_green, (self.x + 10, self.y + 10 + 2*20),8)
-    
+        self.state = 'green'
+        self.draw()
+
     def setRed(self):
-        self.clearTF()
-        pygame.draw.circle(self.screen, self.color_yellow, (self.x + 10, self.y + 10 + 1*20),8)
-        self.clearTF()
-        pygame.draw.circle(self.screen, self.color_red, (self.x + 10, self.y + 10),8)
+        self.state = 'red'
+        self.draw()
 
-    def clearTF(self):
-        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 10), 8)      
-        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 30), 8)      
-        pygame.draw.circle(self.screen, self.off_color, (self.x + 10, self.y + 50), 8) 
+    def setYellow(self):
+        self.state = 'yellow'
+        self.draw()
 
+    # Keeping advanceLeft functions in case needed later
     def setAdvLeft(self):
-        pygame.draw.rect(self.screen,self.color_green,(self.x + 25, self.y + 10, 8, 16)) # use rect as straight arrow.
+        pass
 
-    
     def cancelAdvLeft(self):
-        pygame.draw.rect(self.screen,self.color_yellow,(self.x + 25, self.y + 10, 8, 16)) 
-        pygame.draw.rect(self.screen,self.color_red,(self.x + 25, self.y + 10, 8, 16))
-        
-
-
-
-
-
-    
-
-
-
-
-
-    
+        pass
