@@ -1,35 +1,27 @@
-import pygame 
+import pygame
 import sys
 from traffic_light import Traffic_Light
-from car import Car  # <-- Import Car
-import time
+from car import Car
 
 screen_width = 1000
 screen_height = 1000
 road_width = 300
-light_size = 40
 fps = 60
-car_size = (20,40)
 
-# colours
-black = (0,0,0)
-white = (255,255,255)
-grey = (120,120,120)
-red = (200,0,0)
-green = (0,200,0)
+black = (0, 0, 0)
+white = (255, 255, 255)
+grey = (120, 120, 120)
 yellow = (255, 255, 0)
 
-# init
 pygame.init()
-screen = pygame.display.set_mode((screen_width,screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Traffic Sim")
 clock = pygame.time.Clock()
 
 def draw_dashed_line(start, end, color, width=2, dash_length=20, gap=15):
     x1, y1 = start
     x2, y2 = end
-    dx = x2 - x1
-    dy = y2 - y1
+    dx, dy = x2 - x1, y2 - y1
     distance = max(abs(dx), abs(dy))
     steps = distance // (dash_length + gap)
     for i in range(int(steps)):
@@ -41,45 +33,49 @@ def draw_dashed_line(start, end, color, width=2, dash_length=20, gap=15):
 
 def draw_intersection():
     screen.fill(grey)
-
     mid_x = screen_width // 2
     mid_y = screen_height // 2
     line_width = 4
-
-    # Black roads
-    pygame.draw.rect(screen, black, (0, mid_y - road_width//2, screen_width, road_width))  # horizontal
-    pygame.draw.rect(screen, black, (mid_x - road_width//2, 0, road_width, screen_height))  # vertical
-
-    # Yellow center dividers
-    pygame.draw.line(screen, yellow, (mid_x, 0), (mid_x, mid_y - road_width//2), line_width)          # top
-    pygame.draw.line(screen, yellow, (mid_x, mid_y + road_width//2), (mid_x, screen_height), line_width)  # bottom
-    pygame.draw.line(screen, yellow, (0, mid_y), (mid_x - road_width//2, mid_y), line_width)           # left
-    pygame.draw.line(screen, yellow, (mid_x + road_width//2, mid_y), (screen_width, mid_y), line_width)  # right
-
-    # White dashed lanes
+    white_offset = road_width // 4
     edge_offset = road_width // 2
-    white_offset = road_width // 4  # CORRECT: Halfway from center to edge
 
-    # Vertical dashed lines
+    pygame.draw.rect(screen, black, (0, mid_y - edge_offset, screen_width, road_width))
+    pygame.draw.rect(screen, black, (mid_x - edge_offset, 0, road_width, screen_height))
+
+    pygame.draw.line(screen, yellow, (mid_x, 0), (mid_x, mid_y - edge_offset), line_width)
+    pygame.draw.line(screen, yellow, (mid_x, mid_y + edge_offset), (mid_x, screen_height), line_width)
+    pygame.draw.line(screen, yellow, (0, mid_y), (mid_x - edge_offset, mid_y), line_width)
+    pygame.draw.line(screen, yellow, (mid_x + edge_offset, mid_y), (screen_width, mid_y), line_width)
+
     draw_dashed_line((mid_x - white_offset, 0), (mid_x - white_offset, mid_y - edge_offset), white)
     draw_dashed_line((mid_x + white_offset, 0), (mid_x + white_offset, mid_y - edge_offset), white)
     draw_dashed_line((mid_x - white_offset, screen_height), (mid_x - white_offset, mid_y + edge_offset), white)
     draw_dashed_line((mid_x + white_offset, screen_height), (mid_x + white_offset, mid_y + edge_offset), white)
-
-    # Horizontal dashed lines
     draw_dashed_line((0, mid_y - white_offset), (mid_x - edge_offset, mid_y - white_offset), white)
     draw_dashed_line((0, mid_y + white_offset), (mid_x - edge_offset, mid_y + white_offset), white)
     draw_dashed_line((screen_width, mid_y - white_offset), (mid_x + edge_offset, mid_y - white_offset), white)
     draw_dashed_line((screen_width, mid_y + white_offset), (mid_x + edge_offset, mid_y + white_offset), white)
 
 def main():
-    # Create a list of cars
-    cars = [
-        Car(100, 480, 0, 2),    # Moving right
-        Car(900, 520, 180, 2),  # Moving left
-        Car(480, 100, 90, 2),   # Moving down
-        Car(520, 900, 270, 2),  # Moving up
-    ]
+    mid_x = screen_width // 2
+    mid_y = screen_height // 2
+    left_lane = mid_x - road_width // 2.6
+    right_lane = mid_x + road_width // 2.6
+    top_lane = mid_y - road_width // 2.6
+    bottom_lane = mid_y + road_width // 2.6
+
+    tf1 = Traffic_Light(275, 300, screen, angle=90)
+    tf2 = Traffic_Light(700, 300, screen, angle=0)
+    tf3 = Traffic_Light(275, 700, screen, angle=180)
+    tf4 = Traffic_Light(700, 700, screen, angle=-90)
+
+    traffic_lights = [tf1, tf2, tf3, tf4]
+
+    car1 = Car(375, 1000, screen, 'up', tf4, stop_line=530)       # bottom to top
+    car2 = Car(1000, 375, screen, 'left', tf2, stop_line=530)     # right to left
+
+    cars = [car1, car2]
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -88,16 +84,13 @@ def main():
 
         draw_intersection()
 
-        # Place traffic lights
-        Tf1 = Traffic_Light(700, 300, screen, angle=0)     # top
-        Tf2 = Traffic_Light(300, 700, screen, angle=180)   # bottom
-        Tf3 = Traffic_Light(275, 300, screen, angle=90)    # left
-        Tf4 = Traffic_Light(700, 700, screen, angle=-90)   # right
+        for light in traffic_lights:
+            light.update()
+            light.draw()
 
-        # Move and draw cars
         for car in cars:
             car.move()
-            car.draw(screen)
+            car.draw()
 
         pygame.display.flip()
         clock.tick(fps)

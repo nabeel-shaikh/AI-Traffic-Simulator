@@ -2,56 +2,38 @@ import pygame
 
 class Traffic_Light:
     def __init__(self, x, y, screen, angle=0):
-        self.screen = screen
         self.x = x
         self.y = y
-        self.angle = angle  # Degrees: 0, 90, 180, -90
+        self.screen = screen
+        self.angle = angle
+        self.state = "red"
+        self.width = 30
+        self.height = 70
+        self.radius = 8
 
-        # Colors
-        self.color_red = (200, 0, 0)
-        self.color_yellow = (200, 200, 0)
-        self.color_green = (0, 200, 0)
-        self.off_color = (40, 40, 40)
-
-        self.state = 'red'  # default
-
-        self.width = 20
-        self.height = 60
-
-        self.draw()  # draw initial state
+    def update(self):
+        pass  # Placeholder for future logic
 
     def draw(self):
-        # Create light surface
-        light_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
-        light_surface.fill((50, 50, 50))  # light casing
+        light_surf = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        pygame.draw.rect(light_surf, (40, 40, 40), (0, 0, self.width, self.height))
 
-        # Draw lights based on current state
-        pygame.draw.circle(light_surface, self.color_red if self.state == 'red' else self.off_color, (10, 10), 8)
-        pygame.draw.circle(light_surface, self.color_yellow if self.state == 'yellow' else self.off_color, (10, 30), 8)
-        pygame.draw.circle(light_surface, self.color_green if self.state == 'green' else self.off_color, (10, 50), 8)
+        pos = {
+            'red': (self.width // 2, 15),
+            'yellow': (self.width // 2, self.height // 2),
+            'green': (self.width // 2, self.height - 15)
+        }
 
-        # Rotate the surface
-        rotated_surface = pygame.transform.rotate(light_surface, self.angle)
-        rect = rotated_surface.get_rect(center=(self.x, self.y))
+        for color, position in pos.items():
+            pygame.draw.circle(
+                light_surf,
+                (255, 0, 0) if color == "red" and self.state == "red" else
+                (255, 255, 0) if color == "yellow" and self.state == "yellow" else
+                (0, 255, 0) if color == "green" and self.state == "green" else
+                (60, 60, 60),
+                position, self.radius
+            )
 
-        # Draw to screen
-        self.screen.blit(rotated_surface, rect.topleft)
-
-    def setGreen(self):
-        self.state = 'green'
-        self.draw()
-
-    def setRed(self):
-        self.state = 'red'
-        self.draw()
-
-    def setYellow(self):
-        self.state = 'yellow'
-        self.draw()
-
-    # Keeping advanceLeft functions in case needed later
-    def setAdvLeft(self):
-        pass
-
-    def cancelAdvLeft(self):
-        pass
+        rotated_surf = pygame.transform.rotate(light_surf, self.angle)
+        rotated_rect = rotated_surf.get_rect(center=(self.x, self.y))
+        self.screen.blit(rotated_surf, rotated_rect)
