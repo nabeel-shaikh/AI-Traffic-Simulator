@@ -1,6 +1,7 @@
 import pygame 
 import sys
 from traffic_light import Traffic_Light
+from car import Car  # <-- Import Car
 import time
 
 screen_width = 1000
@@ -72,6 +73,13 @@ def draw_intersection():
     draw_dashed_line((screen_width, mid_y + white_offset), (mid_x + edge_offset, mid_y + white_offset), white)
 
 def main():
+    # Create a list of cars
+    cars = [
+        Car(100, 480, 0, 2),    # Moving right
+        Car(900, 520, 180, 2),  # Moving left
+        Car(480, 100, 90, 2),   # Moving down
+        Car(520, 900, 270, 2),  # Moving up
+    ]
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -85,6 +93,11 @@ def main():
         Tf2 = Traffic_Light(300, 700, screen, angle=180)   # bottom
         Tf3 = Traffic_Light(275, 300, screen, angle=90)    # left
         Tf4 = Traffic_Light(700, 700, screen, angle=-90)   # right
+
+        # Move and draw cars
+        for car in cars:
+            car.move()
+            car.draw(screen)
 
         pygame.display.flip()
         clock.tick(fps)
