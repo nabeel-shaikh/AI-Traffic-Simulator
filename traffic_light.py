@@ -1,4 +1,5 @@
 import pygame
+import time
 
 class Traffic_Light:
     def __init__(self, x, y, screen, angle=0):
@@ -10,9 +11,20 @@ class Traffic_Light:
         self.width = 30
         self.height = 70
         self.radius = 8
+        self.last_switch = pygame.time.get_ticks()
+        self.interval = 1000  # Time in milliseconds for each light state
+
 
     def update(self):
-        pass  # Placeholder for future logic
+        now = pygame.time.get_ticks()
+        if now - self.last_switch>self.interval:
+            self.last_switch = now
+            if self.state == "red":
+                self.state = "green"
+            elif self.state == "green":
+                self.state = "yellow"
+            elif self.state == "yellow":
+                self.state = "red"  
 
     def draw(self):
         light_surf = pygame.Surface((self.width, self.height), pygame.SRCALPHA)

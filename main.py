@@ -64,10 +64,15 @@ def main():
     top_lane = mid_y - road_width // 2.6
     bottom_lane = mid_y + road_width // 2.6
 
-    tf1 = Traffic_Light(275, 300, screen, angle=90)
-    tf2 = Traffic_Light(700, 300, screen, angle=0)
-    tf3 = Traffic_Light(275, 700, screen, angle=180)
-    tf4 = Traffic_Light(700, 700, screen, angle=-90)
+    tf1 = Traffic_Light(275, 300, screen, angle=90) #top left
+    tf2 = Traffic_Light(700, 300, screen, angle=0) # top right
+
+    tf3 = Traffic_Light(275, 700, screen, angle=180) # bottom left
+    tf4 = Traffic_Light(700, 700, screen, angle=-90) # bottom right
+    #tf4.state = "green"
+    #tf1.state="green"
+    tf2.state = "green"
+    #tf3.state = "green"
 
     traffic_lights = [tf1, tf2, tf3, tf4]
 
